@@ -74,5 +74,5 @@ def fetch_and_publish_all_tiles(bbox, duration):
 if __name__ == "__main__":
     # For now bounding box for Virginia
     richmond_bbox = [-77.5205, 37.4030, -77.3025, 37.5680]
-    fetch_and_publish_all_tiles(richmond_bbox, duration=1)  # Run the producer for 1 minute
+    fetch_and_publish_all_tiles(richmond_bbox, duration=3)  # Run the producer for 1 minute
     producer.flush()  # Ensure all messages are sent

@@ -2,14 +2,29 @@ import pandas as pd
 from s3fs.core import S3FileSystem
 import json
 
+def get_processed_files(s3, log_path):
+    try:
+        with s3.open(log_path, 'r') as f:
+            return set(f.read().splitlines())
+    except FileNotFoundError:
+        return set()
+
+def log_processed_file(s3, log_path, file_path):
+    with s3.open(log_path, 'a') as f:
+        f.write(file_path + '\n')
+
 def transform_data():
     DIR_RAW = "s3://ece5984-s3-anastasiia/traffic_data/raw/"
     DIR_TRANSFORMED = "s3://ece5984-s3-anastasiia/traffic_data/transformed/"
+    PROCESSED_LOG = "s3://ece5984-s3-anastasiia/traffic_data/processed_files.log"
     s3 = S3FileSystem()
+
+    processed_files = get_processed_files(s3, PROCESSED_LOG)
 
     raw_files = s3.ls(DIR_RAW)
     for file_path in raw_files:
-        if not file_path.endswith('.json'):
+        if not file_path.endswith('.json') or file_path in processed_files:
+            print(f"Skipping already processed file: {file_path}")
             continue
 
         print(f"Processing file: {file_path}")
@@ -67,3 +82,6 @@ def transform_data():
         with s3.open(transformed_path, 'wb') as f:
             df.to_pickle(f)
         print(f"Transformed file saved to {transformed_path}")
+
+        # Log the processed file
+        log_processed_file(s3, PROCESSED_LOG, file_path)
