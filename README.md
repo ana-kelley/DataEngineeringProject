@@ -1,6 +1,7 @@
 
 
 ## **Real-Time Traffic Incident Visualization Using TomTom API**
+**Author**: Anastasia Kelley | ECE 5984 Data Engineering Project
 
 ### **Project’s Function**
 
@@ -17,29 +18,6 @@ The data is sourced from the TomTom Traffic API, which provides detailed inciden
 
 The pipeline uses Python and Kafka to collect raw JSON data, which is saved in S3 (`s3/raw/`), transforms it into structured formats in S3 (`s3/transformed/`), and loads it into a MySQL database. Only newly added files in S3 are processed. Historical data is preserved, and active events are updated to ensure real-time relevance. Data is visualized using Tableau dashboards.
 
----
-
-### **Data Quality Assessment**
-
-The pipeline ensures data completeness by handling missing fields and flattening nested JSON structures during transformation. Deduplication is performed at the database level to ensure unique records. Data timeliness is maintained by appending only new records, with processed files tracked in logs. Data quality was assessed through schema validation and inspection of transformed samples.
-
----
-
-### **Data Transformation Models Used**
-
-The pipeline flattens nested JSON structures, extracts fields like `coordinates` and `events` into rows, and adds derived time-based fields (e.g., `start_date`, `start_hour`) for analysis. Transformed data is stored as `.pkl` files in S3 for database loading. To execute, sign up for a TomTom API key and configure AWS S3 credentials.
-
----
-
-### **Infographic**
-#### Pipeline architecture:
-![Pipeline architecture](https://github.com/user-attachments/assets/d7f0fd19-ffc1-4217-b964-8689b78958a1)
-
-#### Final Result:
-![Tableau Project Screenshot](https://github.com/user-attachments/assets/c6b10a44-4be8-4a67-84de-687432091d13)
-
-This visualization demonstrates the pipeline's results by identifying **current incident locations**, their **severity based on delay and reports**, and the **trend of incidents over time**. The pipeline automates data ingestion, transformation, and storage, delivering an efficient and scalable solution for traffic monitoring and analysis.
-
 ###### Tools used:
 - **[TomTom Traffic API](https://developer.tomtom.com/traffic-api/api-explorer)**: Provides real-time traffic incident data.
 - **[Apache Kafka](https://kafka.apache.org/)**: Streams real-time data for processing.
@@ -51,6 +29,35 @@ This visualization demonstrates the pipeline's results by identifying **current 
 - **[AWS RDS](https://aws.amazon.com/rds/)**: Hosts the MySQL database.
 - **[Tableau](https://www.tableau.com/)**: Visualizes traffic data in dashboards.
 - **[Airflow](https://airflow.apache.org/)**: Automates and orchestrates pipeline workflows.
+
+---
+
+### **Data Quality Assessment**
+
+The pipeline ensures data completeness by handling missing fields and flattening nested JSON structures during transformation. Deduplication is performed at the database level to ensure unique records. Data timeliness is maintained by appending only new records, with processed files tracked in logs. Data quality was assessed through schema validation and inspection of transformed samples.
+
+---
+
+### **Data Transformation Models Used**
+
+The pipeline processes raw nested JSON from the TomTom API into structured formats for analysis and storage. Data models:
+
+* **Raw** - Nested JSON with fields like id, coordinates, and events.
+* **Transformed** - Flattened data with extracted longitude, latitude, and event details, along with derived time-based fields (start_date, start_hour). Stored as .pkl files in S3.
+* **Database** -  Data in MySQL tracks "present" incidents and marks missing ones as "inactive," enabling real-time and historical analysis.
+
+**Special Instructions:** Execution requires signing up for a TomTom Developer account in order to obtain the API key. Additionally, AWS S3 credentials may need to be configured.
+
+---
+
+### **Infographic**
+#### Pipeline architecture:
+![Pipeline architecture](https://github.com/user-attachments/assets/d7f0fd19-ffc1-4217-b964-8689b78958a1)
+
+#### Final Result:
+![Tableau Project Screenshot](https://github.com/user-attachments/assets/c6b10a44-4be8-4a67-84de-687432091d13)
+
+This visualization demonstrates the pipeline's results by identifying **current incident locations**, their **severity based on delay and reports**, and the **trend of incidents over time**. The pipeline automates data ingestion, transformation, and storage, delivering an efficient and scalable solution for traffic monitoring and analysis.
 
 ---
 
