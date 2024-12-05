@@ -37,8 +37,17 @@ The pipeline uses Python and Kafka to collect raw JSON data, which is saved in S
 The pipeline ensures data completeness by handling missing fields and flattening nested JSON structures during transformation. Deduplication is performed at the database level to ensure unique records. Data timeliness is maintained by appending only new records, with processed files tracked in logs. Data quality was assessed through schema validation and inspection of transformed samples.
 
 ---
+### **Data Provenance & Transformation**
 
-### **Data Transformation Models Used**
+#### **Data Provenance**
+
+The pipeline ensures that each stage of data ingestion, processing, and storage is logged and traceable. Key steps include:
+
+1. Raw data originates from the TomTom Traffic API, providing incident reports like accidents and road closures.
+2. Each API call retrieves "present" incidents, which are stored in S3 under the `raw/` folder for historical reference and analysis.
+3. A processed log in S3 ensures only new files are transformed and loaded into the MySQL database.
+
+#### **Data Transformation Models Used**
 
 The pipeline processes raw nested JSON from the TomTom API into structured formats for analysis and storage. Data models:
 
