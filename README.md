@@ -1,7 +1,7 @@
 
 
 ## **Real-Time Traffic Incident Visualization Using TomTom API**
-**Author**: Anastasia Kelley | ECE 5984 Data Engineering Project
+**Author**: Anastasia Kelley | ECE 5984 Data Engineering Project (Fall 2024)
 
 ### **Project’s Function**
 
